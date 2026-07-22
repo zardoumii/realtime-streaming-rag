@@ -64,4 +64,4 @@ You can also access the interactive API documentation at http://127.0.0.1:8000/d
 
 5. Shut down cleanly
 
-docker compose down
+docker compose down 
