@@ -1,0 +1,15 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Database storage (DO NOT PUSH)
+qdrant_storage/
+qdrant_data/
+
+# Environment variables (API keys)
+.env
