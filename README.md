@@ -40,7 +40,7 @@ HTML/CSS/JS - Frontend Interface
 
 1. Clone the repository
 
-git clone https://github.com/YOUR-USERNAME/realtime-streaming-rag.git
+git clone https://github.com/zardoumii/realtime-streaming-rag.git
 cd realtime-streaming-rag
 
 
