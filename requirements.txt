@@ -1,9 +1,0 @@
-confluent-kafka
-sseclient-py
-requests
-sentence-transformers
-qdrant-client
-torch
-fastapi
-uvicorn
-pydantic

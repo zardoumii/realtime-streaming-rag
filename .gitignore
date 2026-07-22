@@ -1,7 +1,8 @@
 # Python caches
 __pycache__/
 *.pyc
-
+.vscode/
+.DS_Store
 # Virtual environments
 venv/
 env/
