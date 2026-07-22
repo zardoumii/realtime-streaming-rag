@@ -1,0 +1,14 @@
+# API & Web Server
+fastapi
+uvicorn
+pydantic
+
+# AI Models & Vector DB
+sentence-transformers
+qdrant-client
+openai
+
+# Streaming & Messaging
+kafka-python
+sseclient-py
+requests

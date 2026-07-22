@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Wiki RAG</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background-color: #1e1e2f; color: #fff; margin: 0; display: flex; justify-content: center; height: 100vh; }
+        #chat-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; background: #2a2a40; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        #header { padding: 20px; background: #1a1a2e; text-align: center; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid #3a3a50; }
+        #chat-box { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .message { padding: 12px 18px; border-radius: 8px; max-width: 80%; line-height: 1.5; }
+        .user { background: #4e4eef; align-self: flex-end; }
+        .bot { background: #3a3a50; align-self: flex-start; border: 1px solid #4a4a60; }
+        #input-area { display: flex; padding: 15px; background: #1a1a2e; border-top: 1px solid #3a3a50; }
+        input { flex-grow: 1; padding: 12px; border-radius: 6px; border: none; background: #2a2a40; color: white; outline: none; font-size: 1rem; }
+        button { margin-left: 10px; padding: 12px 20px; background: #4e4eef; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button:hover { background: #3b3bcf; }
+        .loading { font-style: italic; color: #aaa; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="header">🌍 Real-Time Wikipedia RAG</div>
+    <div id="chat-box">
+        <div class="message bot">Hello! I am connected to the live Wikipedia stream. Ask me what people are editing right now!</div>
+    </div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="What are the latest edits about?" onkeypress="handleKeyPress(event)">
+        <button onclick="askQuestion()">Send</button>
+    </div>
+</div>
+
+<script>
+    async function askQuestion() {
+        const inputField = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+        const question = inputField.value.trim();
+        if (!question) return;
+
+        // Add User message to UI
+        chatBox.innerHTML += `<div class="message user">${question}</div>`;
+        inputField.value = "";
+        
+        // Add temporary loading message
+        const loadingId = "load-" + Date.now();
+        chatBox.innerHTML += `<div class="message bot loading" id="${loadingId}">Thinking and searching live data...</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            // Send to our FastAPI backend
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: question })
+            });
+            
+            const data = await response.json();
+            
+            // Replace loading message with the AI's actual answer
+            document.getElementById(loadingId).outerHTML = `<div class="message bot">${data.answer}</div>`;
+        } catch (error) {
+            document.getElementById(loadingId).outerHTML = `<div class="message bot" style="color: #ff6b6b;">Error connecting to API.</div>`;
+        }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") askQuestion();
+    }
+</script>
+</body>
+</html>
